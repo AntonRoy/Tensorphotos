@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <title>Vk_photos</title>
+    <meta charset="UTF-8">
+<style>
+    * {
+margin:0;
+}
+body {
+ height: 100%;
+ min-width:900px;
+}
+html {
+ position:relative;
+ min-height:100%;
+}
+#container {
+ padding-bottom: 100px;/*Примерно 2 размера footer, чтобы он не наезжал на контент при узком окне браузера*/
+}
+#footer {
+
+ height: 80px;
+ position: absolute;
+ bottom: 0;
+ width: 100%;
+}
+</style>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <span class="navbar-brand">VK photos</span>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="#" >О нас</a></li>
+            </ul>
+        </div>
+        <div>
+            <input class="btn btn-success btn-md" type = 'submit'  value="Выйти">
+        </div>
+    </div>
+</nav>
+<div align = left class = container>
+    {% block photos %}
+        {% for photo in photos %}
+            <img src={{photo}} alt="">
+        {% endfor %}
+    {% endblock %}
+</div>
+
+<div align = center class = container>
+    {% block photos1 %}
+        {% for photo in photos1 %}
+            <img src={{photo}} alt="">
+        {% endfor %}
+    {% endblock %}
+</div>
+
+<div align = right class = container>
+    {% block photos2 %}
+        {% for photo in photos2 %}
+            <img src={{photo}} alt="">
+        {% endfor %}
+    {% endblock %}
+</div>
