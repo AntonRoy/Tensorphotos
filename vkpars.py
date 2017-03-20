@@ -2,49 +2,48 @@ import vk_api
 import random
 import time
 import tqdm
+import vk as vk1
 
 def captcha_handler(captcha):
     key = input("Enter Captcha {0}: ".format(captcha.get_url())).strip()
     return captcha.try_again(key)
 
 
-def user_photos(login, password, id):
-    vk_app_id = -1
-    try:
-        vk = vk_api.VkApi(login, password, vk_app_id, captcha_handler=captcha_handler)
-        vk.authorization()
-    except vk_api.AuthorizationError as error_msg:
-        print(error_msg)
+def user_photos(id):
+    session = vk1.Session(access_token='5514ece0b607363d71e6045e8db3bb672b92ded395897ea50c126e49bee803399b51c2f2dafdf4567df16')
+    vk = vk1.API(session)
     values = {
         'owner_id': id,
         'count':50
     }
     photos = {'my_photos':[], 'friends_photos':[], 'ff_photos':[]}
-    for el in vk.method('photos.getAll', values)['items']:
-        photos['my_photos'].append(el['photo_130'])
-    friends_list = vk.method('friends.get', {'user_id':id})['items']
+    print(vk.photos.getAll(owner_id=id, count=50))
+    for el in vk.photos.getAll(owner_id=id, count=50)[1:]:
+        photos['my_photos'].append(el['src'])
+    print(vk.friends.get(user_id=id))
+    friends_list = vk.friends.get(user_id=id)
     random.shuffle(friends_list)
     friends_list = friends_list[:20] #количество друзей
     for uid in tqdm.tqdm(friends_list):
         try:
-            photo = vk.method('photos.getAll', {'owner_id': uid, 'count': 50})['items']
+            photo = vk.photos.getAll(owner_id=uid, count=20)[1:]
             for el in photo:
-                photos['friends_photos'].append(el['photo_130'])
+                photos['friends_photos'].append(el['src'])
         except:
             pass
     ff_list = []
     for uid in tqdm.tqdm(friends_list):
         try:
-            ff_list.extend(vk.method('friends.get', {'user_id': uid})['items'])
+            ff_list.extend(vk.friends.get(user_id=uid))
         except:
             pass
     random.shuffle(ff_list)
     ff_list = ff_list[:20] #количество друзей друзей
     for uid in tqdm.tqdm(ff_list):
         try:
-            photo = vk.method('photos.getAll', {'owner_id': uid, 'count': 3})['items']
+            photo = vk.photos.getAll(owner_id=uid, count=10)[1:]
         except:
             pass
         for el in photo:
-            photos['ff_photos'].append(el['photo_130'])
+            photos['ff_photos'].append(el['src'])
     return photos
