@@ -18,7 +18,7 @@ def login():
     error = None
     if request.method == 'POST':
         id = request.form['login']
-        photos = vkpars.user_photos('Здесь введи свой логин', 'Здесь пароль', id) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        photos = vkpars.user_photos(id)
         return render_template('found.html', photos=photos['my_photos'], photos1=photos['friends_photos'], photos2=photos['ff_photos'], error=error, result='')
 
     return render_template('about.html', error=error, result='')
