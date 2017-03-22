@@ -49,23 +49,7 @@ html {
 <div align = left class = container>
     {% block photos %}
         {% for photo in photos %}
-            <img src={{photo}} alt="">
-        {% endfor %}
-    {% endblock %}
-</div>
-
-<div align = center class = container>
-    {% block photos1 %}
-        {% for photo in photos1 %}
-            <img src={{photo}} alt="">
-        {% endfor %}
-    {% endblock %}
-</div>
-
-<div align = right class = container>
-    {% block photos2 %}
-        {% for photo in photos2 %}
-            <img src={{photo}} alt="">
+            <img src={{photo}}>
         {% endfor %}
     {% endblock %}
 </div>
