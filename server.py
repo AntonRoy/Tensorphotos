@@ -1,7 +1,7 @@
 from flask import *
 from flask_bootstrap import Bootstrap
 import os
-import vkpars
+import label_image
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -18,9 +18,11 @@ def login():
     error = None
     if request.method == 'POST':
         id = request.form['login']
-        photos = vkpars.user_photos(id)
-        return render_template('found.html', photos=photos['my_photos'], photos1=photos['friends_photos'], photos2=photos['ff_photos'], error=error, result='')
-
+        select = request.form['photo_type']
+        print(id, select)
+        VkPhotos = label_image.photos_class(id)
+        print(VkPhotos)
+        return render_template('found.html', photos=VkPhotos[select], error=error, result='')
     return render_template('about.html', error=error, result='')
 
 

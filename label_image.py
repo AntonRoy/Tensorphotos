@@ -2,10 +2,11 @@ import tensorflow as tf, sys
 import urllib.request
 import vkpars
 import tqdm
+import random
 
 def photos_class(id):
     vup = vkpars.user_photos(id)
-    data = vup['my_photos'] + vup['friends_photos'] + vup['ff_photos']
+    data = vup['ff_photos'] + vup['my_photos'] + vup['friends_photos']
     count = 10 #количество фотографий
     data = data[:count]
     return class_of_photos(data)
@@ -31,11 +32,12 @@ def get_class(url):
             score = predictions[0][node_id]
             if score > max_score:
                 max_score = score
-                photo_class = human_string
-        return photo_class
+                photo_class1 = human_string
+        return photo_class1
 
 
 def class_of_photos(url_list):
-    for i in tqdm.tqdm(range(len(url_list))):
-        url_list[i] = (url_list[i], get_class(url_list[i]))
-    return url_list
+    PhotoSet = {'all':[], 'ladies naked':[], 'ladies swimsuit':[], 'men naked':[], 'men swimsuit':[]}
+    for url in tqdm.tqdm(url_list):
+        PhotoSet[get_class(url)].append(url)
+    return PhotoSet

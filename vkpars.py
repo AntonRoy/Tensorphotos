@@ -3,6 +3,12 @@ import random
 import time
 import tqdm
 import vk as vk1
+import urllib
+
+def get_photo(url, id):
+    path = "vk_photos/" + str(id) + '.jpeg'
+    file = open(path, "w+")
+    urllib.request.urlretrieve(url, path)
 
 def captcha_handler(captcha):
     key = input("Enter Captcha {0}: ".format(captcha.get_url())).strip()
@@ -14,19 +20,17 @@ def user_photos(id):
     vk = vk1.API(session)
     values = {
         'owner_id': id,
-        'count':50
+        'count':100
     }
     photos = {'my_photos':[], 'friends_photos':[], 'ff_photos':[]}
-    print(vk.photos.getAll(owner_id=id, count=50))
     for el in vk.photos.getAll(owner_id=id, count=50)[1:]:
         photos['my_photos'].append(el['src'])
-    print(vk.friends.get(user_id=id))
     friends_list = vk.friends.get(user_id=id)
     random.shuffle(friends_list)
-    friends_list = friends_list[:20] #количество друзей
+    friends_list = friends_list[:100] #количество друзей
     for uid in tqdm.tqdm(friends_list):
         try:
-            photo = vk.photos.getAll(owner_id=uid, count=20)[1:]
+            photo = vk.photos.getAll(owner_id=uid, count=10)[1:]
             for el in photo:
                 photos['friends_photos'].append(el['src'])
         except:
@@ -38,10 +42,10 @@ def user_photos(id):
         except:
             pass
     random.shuffle(ff_list)
-    ff_list = ff_list[:20] #количество друзей друзей
+    ff_list = ff_list[:100] #количество друзей друзей
     for uid in tqdm.tqdm(ff_list):
         try:
-            photo = vk.photos.getAll(owner_id=uid, count=10)[1:]
+            photo = vk.photos.getAll(owner_id=uid, count=5)[1:]
         except:
             pass
         for el in photo:
