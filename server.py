@@ -19,9 +19,7 @@ def login():
     if request.method == 'POST':
         id = request.form['login']
         select = request.form['photo_type']
-        print(id, select)
         VkPhotos = label_image.photos_class(id)
-        print(VkPhotos)
         return render_template('found.html', photos=VkPhotos[select], error=error, result='')
     return render_template('about.html', error=error, result='')
 

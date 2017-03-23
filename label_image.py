@@ -6,20 +6,24 @@ import random
 
 def photos_class(id):
     vup = vkpars.user_photos(id)
-    data = vup['ff_photos'] + vup['my_photos'] + vup['friends_photos']
-    count = 10 #количество фотографий
-    data = data[:count]
-    return class_of_photos(data)
+    vk_data = vup['ff_photos'] + vup['my_photos'] + vup['friends_photos']
+    batch_size = 20 #количество фотографий в одном блоке
+    data = []
+    i = 1
+    vk_data = vk_data[:42]
+    PhotoSet = {'ladies naked': [], 'ladies swimsuit': [], 'men naked': [], 'men swimsuit': []}
+    while i * batch_size <= len(vk_data):
+        PhotoSet = class_of_photos(vk_data[(i-1)*batch_size:i*batch_size], PhotoSet)
+        i += 1
+    if (i - 1) * batch_size != len(vk_data):
+        PhotoSet = class_of_photos(vk_data[(i - 1) * batch_size:], PhotoSet)
+    return PhotoSet
 
 
-def get_class(url):
+def get_class(url, _):
     image_data = urllib.request.urlopen(url).read()
     label_lines = [line.rstrip() for line in tf.gfile.GFile("tf_files/retrained_labels.txt")]
 
-    with tf.gfile.FastGFile("tf_files/retrained_graph.pb", 'rb') as f:
-        graph_def = tf.GraphDef()
-        graph_def.ParseFromString(f.read())
-        _ = tf.import_graph_def(graph_def, name='')
 
     with tf.Session() as sess:
         softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
@@ -36,8 +40,11 @@ def get_class(url):
         return photo_class1
 
 
-def class_of_photos(url_list):
-    PhotoSet = {'all':[], 'ladies naked':[], 'ladies swimsuit':[], 'men naked':[], 'men swimsuit':[]}
+def class_of_photos(url_list, PhotoSet):
+    with tf.gfile.FastGFile("tf_files/retrained_graph.pb", 'rb') as f:
+        graph_def = tf.GraphDef()
+        graph_def.ParseFromString(f.read())
+        _ = tf.import_graph_def(graph_def, name='')
     for url in tqdm.tqdm(url_list):
-        PhotoSet[get_class(url)].append(url)
+        PhotoSet[get_class(url, _)].append(url)
     return PhotoSet
