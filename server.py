@@ -1,7 +1,7 @@
 from flask import *
 from flask_bootstrap import Bootstrap
 import os
-import label_image
+import photo2class
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -19,7 +19,7 @@ def login():
     if request.method == 'POST':
         id = request.form['login']
         select = request.form['photo_type']
-        VkPhotos = label_image.photos_class(id)
+        VkPhotos = photo2class.photos_class(id)
         return render_template('found.html', photos=VkPhotos[select], error=error, result='')
     return render_template('about.html', error=error, result='')
 
