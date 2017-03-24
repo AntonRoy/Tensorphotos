@@ -18,16 +18,13 @@ def captcha_handler(captcha):
 def user_photos(id):
     session = vk1.Session(access_token='5514ece0b607363d71e6045e8db3bb672b92ded395897ea50c126e49bee803399b51c2f2dafdf4567df16')
     vk = vk1.API(session)
-    values = {
-        'owner_id': id,
-        'count':100
-    }
     photos = {'my_photos':[], 'friends_photos':[], 'ff_photos':[]}
     for el in vk.photos.getAll(owner_id=id, count=50)[1:]:
         photos['my_photos'].append(el['src'])
     friends_list = vk.friends.get(user_id=id)
     random.shuffle(friends_list)
-    friends_list = friends_list[:100] #количество друзей
+    friends_list = friends_list[:100]#количество друзей
+    friends_list = list(set(friends_list))
     for uid in tqdm.tqdm(friends_list):
         try:
             photo = vk.photos.getAll(owner_id=uid, count=10)[1:]
@@ -41,6 +38,7 @@ def user_photos(id):
             ff_list.extend(vk.friends.get(user_id=uid))
         except:
             pass
+    ff_list = list(set(ff_list))
     random.shuffle(ff_list)
     ff_list = ff_list[:100] #количество друзей друзей
     for uid in tqdm.tqdm(ff_list):
