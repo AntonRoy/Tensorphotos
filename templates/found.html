@@ -46,10 +46,43 @@ html {
         </div>
     </div>
 </nav>
-<div align = left class = container>
-    {% block photos %}
+<div class="jumbotron">
+    <div class="container">
+        <h2>Мои фото</h2>
+        {% block photos_my %}
+        {% for photo in photos_my %}
+            <img src={{photo}}>
+        {% endfor %}
+        {% endblock %}
+    </div>
+</div>
+<div class="jumbotron">
+    <div class="container">
+        <h2>Фото друзей</h2>
+        {% block photos_f %}
+        {% for photo in photos_f %}
+            <img src={{photo}}>
+        {% endfor %}
+        {% endblock %}
+    </div>
+</div>
+<div class="jumbotron">
+    <div class="container">
+        <h2>Фото друзей друзей</h2>
+        {% block photos_ff %}
+        {% for photo in photos_ff %}
+            <img src={{photo}}>
+        {% endfor %}
+        {% endblock %}
+    </div>
+</div>
+<div class="jumbotron">
+    <div class="container">
+        <h2>Результат</h2>
+        {% block photos %}
         {% for photo in photos %}
             <img src={{photo}}>
         {% endfor %}
-    {% endblock %}
+        {% endblock %}
+    </div>
 </div>
