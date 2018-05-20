@@ -15,15 +15,14 @@ def get_class(url):
         for node_id in top_k:
             human_string = label_lines[node_id]#текущий класс
             score = predictions[0][node_id]#вероятность принадлежности текущему классу
-            #здесь я проверяю если скор максимальный, то photo_class = типу с максимальным скором
+            #если скор максимальный, то photo_class = типу с максимальным скором
             if score > max_score:
                 max_score = score
                 photo_class = human_string
         return photo_class
 
-#эта функция обрабатывает блок фотографий, для каждого блока создается граф
+#эта функция обрабатывает блок фотографий
 def class_of_photos(url_list, PhotoSet):
-    #делаю граф
     with tf.gfile.FastGFile("tf_files/retrained_graph.pb", 'rb') as f:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
